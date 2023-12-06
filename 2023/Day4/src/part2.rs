@@ -24,11 +24,10 @@ fn get_cards_points(lines: std::str::Split<'_, &str>) -> HashMap<String, i32> {
 
         println!("{card_id} {:?}", card_points.get(&card_id));
         
-        for _c in 0..=copy_count{
-            for i in 1..=match_count {
-                *card_copies.entry(format!("{}", id + i)).or_insert(0) += 1;
-            }
+        for i in 1..=match_count {
+            *card_copies.entry(format!("{}", id + i)).or_insert(0) += copy_count + 1;
         }
+        
 
     }
 
