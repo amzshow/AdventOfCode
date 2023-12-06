@@ -77,37 +77,12 @@ fn find_num_pos(text: &Vec<Vec<char>>) -> Vec<NumPos> {
 
 fn is_num_adjoining(num: &NumPos, gear: &GearPos) -> bool {
 
-    if num.row == gear.row {
-        if num.col_j == gear.col - 1 || num.col_i == gear.col + 1 {
-            return true;
-        }
-    }
+    let row_diff: i32 = (gear.row as i32 - num.row as i32).abs();
+    let col_diff_start: i32 = (gear.col as i32 - num.col_i as i32).abs();
+    let col_diff_end: i32 = (gear.col as i32 - num.col_j as i32).abs();
 
-    if num.row == gear.row - 1 {
-        if num.col_i <= gear.col && num.col_j <= gear.col {
-            return true;
-        }
-        if num.col_i <= gear.col + 1 && num.col_j <= gear.col + 1 {
-            return true;
-        } 
-        if num.col_i <= gear.col - 1 && num.col_j <= gear.col - 1 {
-            return true;
-        } 
-    }
+    return row_diff <= 1 && (col_diff_start <= 1 || col_diff_end <= 1)
 
-    if num.row == gear.row + 1 {
-        if num.col_i <= gear.col && num.col_j <= gear.col {
-            return true;
-        }
-        if num.col_i <= gear.col + 1 && num.col_j <= gear.col + 1 {
-            return true;
-        } 
-        if num.col_i <= gear.col - 1 && num.col_j <= gear.col - 1 {
-            return true;
-        } 
-    }
-
-    return false;
 }
 
 fn find_nums_with_adjoining_gear(num_pos: &Vec<NumPos>, gear_pos: &Vec<GearPos>) -> Vec<i32> {
