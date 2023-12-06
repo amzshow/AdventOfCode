@@ -17,8 +17,6 @@ fn get_cards_points(lines: std::str::Split<'_, &str>) -> HashMap<String, i32> {
         let mut match_count: i32 = winning_numbers.intersection(&numbers).count() as i32;
         let base: i32 = 2;
 
-        //println!("{:?} {:?}", data, match_count);
-
         if match_count > 0 {
             match_count = match_count - 1;
             card_points.insert(card_id.to_owned(),  base.pow(match_count as u32));
