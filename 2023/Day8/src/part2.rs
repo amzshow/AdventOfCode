@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fs};
 
-fn gcd(a: i32, b: i32) -> i32 {
+fn gcd(a: i64, b: i64) -> i64 {
     if b == 0 {
         a
     } else {
@@ -8,8 +8,8 @@ fn gcd(a: i32, b: i32) -> i32 {
     }
 }
 
-fn lcm(xs: Vec<i32>) -> i32 {
-    let mut ans: i32 = 1;
+fn lcm(xs: Vec<i64>) -> i64 {
+    let mut ans: i64 = 1;
     for x in xs {
         ans = (x * ans) / gcd(x, ans)
     }
@@ -33,10 +33,6 @@ fn parse_nodes(lines: Vec<&str>) -> HashMap<String, (String, String)> {
     return map;
 }
 
-fn is_power_of_10(num: u64) -> bool {
-    (num > 0) && ((num as f64).log10() % 1.0 == 0.0)
-}
-
 pub fn call() {
     let content: String = fs::read_to_string("./input.txt")
         .expect("Read file")
@@ -47,35 +43,29 @@ pub fn call() {
     let ops: Vec<char> = lines[0].chars().collect();
 
     let map: HashMap<String, (String, String)> = parse_nodes((&lines[2..]).to_vec());
-    let step_limit: i64 = 10000000000000000;
 
     let mut current: Vec<&String> = map.keys().filter(|x| x.ends_with('A')).collect();
 
     let mut i: usize = 0;
     let mut steps: i64 = 0;
 
-    while !current.iter().all(|x| x.ends_with('Z')) {
-        for j in 0..current.len() {
-            current[j] = if ops[i] == 'L' {
-                &map.get(current[j]).expect("").0
+    let mut checkpoint: Vec<i64> = vec![];
+
+    for mut c in current {
+        i = 0;
+        steps = 0;
+        while !(*c).ends_with('Z') {
+            c = if ops[i] == 'L' {
+                &map.get(c).expect("").0
             } else {
-                &map.get(current[j]).expect("").1
+                &map.get(c).expect("").1
             };
+
+            steps += 1;
+            i = (i + 1) % ops.len();
         }
-
-        steps += 1;
-
-        i = (i + 1) % ops.len();
-
-        if is_power_of_10(steps.try_into().unwrap()) {
-            println!("{:?}", steps);
-        }
-
-        if steps > step_limit.try_into().unwrap() {
-            println!("Too many steps");
-            break;
-        }
+        checkpoint.push(steps)
     }
 
-    println!("{:?}", steps);
+    println!("{:?}", lcm(checkpoint));
 }

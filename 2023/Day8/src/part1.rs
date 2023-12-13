@@ -27,7 +27,6 @@ pub fn call() {
     let ops: Vec<char> = lines[0].chars().collect();
 
     let map: HashMap<String, (String, String)> = parse_nodes((&lines[2..]).to_vec());
-    let step_limit = 30 * map.len();
 
     let mut current: &str = "AAA";
     let mut i: usize = 0;
@@ -43,11 +42,6 @@ pub fn call() {
         steps += 1;
 
         i = (i + 1) % ops.len();
-
-        if steps > step_limit.try_into().unwrap() {
-            println!("Too many steps");
-            break;
-        }
     }
 
     println!("{:?}", steps)
