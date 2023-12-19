@@ -129,6 +129,20 @@ fn bfs(map: &Vec<Vec<char>>, i: usize, j: usize) -> i32 {
     return s;
 }
 
+fn find_and_determine_s(map: &mut Vec<Vec<char>>) -> [usize; 2] {
+    let mut start_pos: [usize; 2] = [0, 0];
+    for i in 0..map.len() {
+        for j in 0..map[i].len() {
+            if map[i][j] == 'S' {
+                start_pos = [i, j];
+                map[i][j] = determine_pipe(&map, i, j);
+                break;
+            }
+        }
+    }
+    return start_pos;
+}
+
 pub fn call() {
     let content: String = fs::read_to_string("./input.txt")
         .expect("Read file")
@@ -138,16 +152,7 @@ pub fn call() {
 
     let mut map: Vec<Vec<char>> = lines.iter().map(|x| x.chars().collect()).collect();
 
-    let mut start_pos: [usize; 2] = [0, 0];
-
-    for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == 'S' {
-                start_pos = [i, j];
-                map[i][j] = determine_pipe(&map, i, j);
-            }
-        }
-    }
+    let start_pos: [usize; 2] = find_and_determine_s(&mut map);
 
     println!("{}", bfs(&map, start_pos[0], start_pos[1]));
 }

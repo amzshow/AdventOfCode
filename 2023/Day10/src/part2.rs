@@ -194,16 +194,7 @@ pub fn call() {
 
     let mut map: Vec<Vec<char>> = lines.iter().map(|x| x.chars().collect()).collect();
 
-    let mut start_pos: [usize; 2] = [0, 0];
-
-    for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == 'S' {
-                start_pos = [i, j];
-                map[i][j] = determine_pipe(&map, i, j);
-            }
-        }
-    }
+    let start_pos: [usize; 2] = find_and_determine_s(&mut map);
 
     let boundary: HashSet<(usize, usize)> = bfs(&map, start_pos[0], start_pos[1]);
 
@@ -220,7 +211,6 @@ pub fn call() {
                 }
             }
         }
-        println!()
     }
 
     println!("{}", insides)

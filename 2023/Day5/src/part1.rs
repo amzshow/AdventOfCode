@@ -115,14 +115,6 @@ fn calculate_source_to_locations_mapping(
             let source: i64 = num[1];
             let dest: i64 = num[0];
             let range: i64 = num[2];
-            println!(
-                "{} / {}: {} | {} -> {}",
-                i + 1,
-                data.len(),
-                numbers.len(),
-                source,
-                dest
-            );
             mapping.push(Mapping {
                 src_i: source,
                 src_j: source + range - 1,
@@ -170,30 +162,14 @@ pub fn call() {
     let mut data: Vec<(Type, Vec<Vec<i64>>)> = parse_data_to_type(lines);
     let conversions: IndexMap<Type, Type> = parse_data_to_conversions(_lines);
 
-    println!("Done Parsing");
-
     let source: Vec<i64> = data[0].1[0].clone();
     data.remove(0);
 
     let locations_mapping: HashMap<Type, Vec<Mapping>> =
         calculate_source_to_locations_mapping(data);
 
-    println!("Done Mapping");
-
     let final_locations: HashMap<i64, i64> =
         convert_source_to_location(source, locations_mapping, conversions);
 
-    println!("Done Src to Dest");
-
-    println!("{:?}", final_locations);
-
     println!("{:?}", final_locations.values().min());
-
-    // for s in source {
-    //     if locations.contains_key(&s) {
-    //         println!("{:?}: {:?}", s, locations.get(&s));
-    //     } else {
-    //         println!("{:?}: {:?}", s, s)
-    //     }
-    // }
 }

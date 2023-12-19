@@ -42,8 +42,6 @@ pub fn call() {
             }
         }
 
-        println!("{:?}", win_hold_ms);
-
         possibility_mult = possibility_mult * win_hold_ms.len() as i32;
     }
 

@@ -4,7 +4,7 @@ use std::fs;
 struct NumPos {
     row: usize,
     col_i: usize,
-    col_j: usize
+    col_j: usize,
 }
 
 fn find_num_pos(text: &Vec<Vec<char>>) -> Vec<NumPos> {
@@ -13,7 +13,7 @@ fn find_num_pos(text: &Vec<Vec<char>>) -> Vec<NumPos> {
     let pos_default: NumPos = NumPos {
         row: usize::MAX,
         col_i: usize::MAX,
-        col_j: usize::MAX
+        col_j: usize::MAX,
     };
 
     for (i, row) in text.iter().enumerate() {
@@ -46,7 +46,7 @@ fn is_symbol(chr: char) -> bool {
     return chr != '.' && !chr.is_alphanumeric();
 }
 
-fn is_num_adjoining(text: &Vec<Vec<char>> , pos: &NumPos) -> i32 {
+fn is_num_adjoining(text: &Vec<Vec<char>>, pos: &NumPos) -> i32 {
     // let num = text[pos.row as usize]
     // .iter()
     // .cloned()
@@ -54,13 +54,14 @@ fn is_num_adjoining(text: &Vec<Vec<char>> , pos: &NumPos) -> i32 {
     // .take(pos.col_j  as usize - pos.col_i  as usize + 1)
     // .collect();
 
-    let n: String = text[pos.row as usize][(pos.col_i as usize)..=(pos.col_j  as usize)].iter().collect();
+    let n: String = text[pos.row as usize][(pos.col_i as usize)..=(pos.col_j as usize)]
+        .iter()
+        .collect();
     let num: i32 = n.parse::<i32>().unwrap();
 
     let rows: usize = text.len();
 
     if rows != 0 {
-
         let cols: usize = text[0].len();
 
         let move_left: bool = pos.col_i > 0;
@@ -69,7 +70,6 @@ fn is_num_adjoining(text: &Vec<Vec<char>> , pos: &NumPos) -> i32 {
         let move_down: bool = pos.row < rows - 1;
 
         if move_left {
-
             if is_symbol(text[pos.row][pos.col_i - 1]) {
                 return num;
             }
@@ -115,13 +115,12 @@ fn is_num_adjoining(text: &Vec<Vec<char>> , pos: &NumPos) -> i32 {
                 }
             }
         }
-
     }
 
     return 0;
 }
 
-fn find_nums_with_adjoining_symbols(text: &Vec<Vec<char>> , num_pos: &Vec<NumPos>) -> Vec<i32> {
+fn find_nums_with_adjoining_symbols(text: &Vec<Vec<char>>, num_pos: &Vec<NumPos>) -> Vec<i32> {
     let mut nums: Vec<i32> = vec![];
 
     for pos in num_pos {
@@ -132,13 +131,11 @@ fn find_nums_with_adjoining_symbols(text: &Vec<Vec<char>> , num_pos: &Vec<NumPos
 }
 
 pub fn call() {
-
-    let content: String = fs::read_to_string("./input.txt")
-    .expect("Read file");
+    let content: String = fs::read_to_string("./input.txt").expect("Read file");
 
     let lines: std::str::Lines<'_> = content.lines();
     let mut text: Vec<Vec<char>> = vec![];
-    
+
     for line in lines {
         let mut subtext: Vec<char> = vec![];
         for char in line.chars() {
@@ -148,12 +145,9 @@ pub fn call() {
     }
 
     let num_pos: Vec<NumPos> = find_num_pos(&text);
-    
+
     let nums_with_adjoining_symbols: Vec<i32> = find_nums_with_adjoining_symbols(&text, &num_pos);
     let sum: i32 = nums_with_adjoining_symbols.iter().sum();
 
-    println!("{:?}", nums_with_adjoining_symbols);
-
     println!("{:?}", sum);
-    
 }

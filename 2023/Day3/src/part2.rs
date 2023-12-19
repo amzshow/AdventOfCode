@@ -5,13 +5,13 @@ struct NumPos {
     row: usize,
     col_i: usize,
     col_j: usize,
-    value: i32
+    value: i32,
 }
 
 #[derive(Clone, Debug)]
 struct GearPos {
     row: usize,
-    col: usize
+    col: usize,
 }
 
 fn find_gear_pos(text: &Vec<Vec<char>>) -> Vec<GearPos> {
@@ -20,13 +20,9 @@ fn find_gear_pos(text: &Vec<Vec<char>>) -> Vec<GearPos> {
     for (i, row) in text.iter().enumerate() {
         for (j, char) in row.iter().enumerate() {
             if *char == '*' {
-                let mut pos: GearPos = GearPos {
-                    row: i,
-                    col: j
-                };
+                let mut pos: GearPos = GearPos { row: i, col: j };
                 gear_pos.push(pos);
             }
-
         }
     }
 
@@ -40,7 +36,7 @@ fn find_num_pos(text: &Vec<Vec<char>>) -> Vec<NumPos> {
         row: usize::MAX,
         col_i: usize::MAX,
         col_j: usize::MAX,
-        value: -1
+        value: -1,
     };
 
     for (i, row) in text.iter().enumerate() {
@@ -54,7 +50,10 @@ fn find_num_pos(text: &Vec<Vec<char>>) -> Vec<NumPos> {
                 pos.col_j = j;
             } else {
                 if pos.row != usize::MAX {
-                    let n: String = text[pos.row as usize][(pos.col_i as usize)..=(pos.col_j  as usize)].iter().collect();
+                    let n: String = text[pos.row as usize]
+                        [(pos.col_i as usize)..=(pos.col_j as usize)]
+                        .iter()
+                        .collect();
                     let num: i32 = n.parse::<i32>().unwrap();
                     pos.value = num;
                     num_pos.push(pos);
@@ -63,7 +62,9 @@ fn find_num_pos(text: &Vec<Vec<char>>) -> Vec<NumPos> {
             }
 
             if j == row.len() - 1 && pos.row != usize::MAX {
-                let n: String = text[pos.row as usize][(pos.col_i as usize)..=(pos.col_j  as usize)].iter().collect();
+                let n: String = text[pos.row as usize][(pos.col_i as usize)..=(pos.col_j as usize)]
+                    .iter()
+                    .collect();
                 let num: i32 = n.parse::<i32>().unwrap();
                 pos.value = num;
                 num_pos.push(pos);
@@ -76,13 +77,11 @@ fn find_num_pos(text: &Vec<Vec<char>>) -> Vec<NumPos> {
 }
 
 fn is_num_adjoining(num: &NumPos, gear: &GearPos) -> bool {
-
     let row_diff: i32 = (gear.row as i32 - num.row as i32).abs();
     let col_diff_start: i32 = (gear.col as i32 - num.col_i as i32).abs();
     let col_diff_end: i32 = (gear.col as i32 - num.col_j as i32).abs();
 
-    return row_diff <= 1 && (col_diff_start <= 1 || col_diff_end <= 1)
-
+    return row_diff <= 1 && (col_diff_start <= 1 || col_diff_end <= 1);
 }
 
 fn find_nums_with_adjoining_gear(num_pos: &Vec<NumPos>, gear_pos: &Vec<GearPos>) -> Vec<i32> {
@@ -108,13 +107,11 @@ fn find_nums_with_adjoining_gear(num_pos: &Vec<NumPos>, gear_pos: &Vec<GearPos>)
 }
 
 pub fn call() {
-
-    let content: String = fs::read_to_string("./input.txt")
-    .expect("Read file");
+    let content: String = fs::read_to_string("./input.txt").expect("Read file");
 
     let lines: std::str::Lines<'_> = content.lines();
     let mut text: Vec<Vec<char>> = vec![];
-    
+
     for line in lines {
         let mut subtext: Vec<char> = vec![];
         for char in line.chars() {
@@ -125,12 +122,9 @@ pub fn call() {
 
     let num_pos: Vec<NumPos> = find_num_pos(&text);
     let gear_pos: Vec<GearPos> = find_gear_pos(&text);
-    
+
     let nums_with_adjoining_symbols: Vec<i32> = find_nums_with_adjoining_gear(&num_pos, &gear_pos);
     let sum: i32 = nums_with_adjoining_symbols.iter().sum();
 
-    println!("{:?}", nums_with_adjoining_symbols);
-
     println!("{:?}", sum);
-    
 }
