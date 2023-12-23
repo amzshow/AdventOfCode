@@ -90,10 +90,6 @@ pub fn call() {
     for (i, grid) in content.split("\n\n").enumerate() {
         let lines: Vec<&str> = grid.split("\n").collect();
 
-        if i == 2 {
-            print!("")
-        }
-
         let hortizontal_index: usize = find_hortizontal_reflection(&lines);
         let vertical_index: usize = find_vertical_reflection(&lines);
 
